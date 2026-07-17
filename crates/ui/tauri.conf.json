@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "identifier": "dev.stefan.telegram-gui",
   "build": {
-    "frontendDist": "../../frontend/dist",
-    "beforeBuildCommand": "pnpm --dir ../../frontend build"
+    "frontendDist": "../../frontend/dist"
   },
   "app": {
     "windows": [

@@ -110,6 +110,7 @@ which uploads the bundle as a workflow artifact without creating a release.
 To build locally (requires the Tauri CLI: `cargo install tauri-cli`):
 
 ```bash
+pnpm --dir frontend build              # tauri embeds the pre-built dist
 cd crates/ui && cargo tauri build --bundles app dmg
 # → target/release/bundle/macos/TelegramGui.app  and  .../dmg/*.dmg
 ```

@@ -31,11 +31,15 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
-      # tauri build runs the config's beforeBuildCommand (which builds the
-      # frontend), but the deps must be installed first.
-      - name: Install frontend deps
+      # Build the frontend explicitly (tauri embeds frontendDist, which is
+      # resolved relative to the config file, so the pre-built dist is picked
+      # up). We don't use beforeBuildCommand — its cwd-relative path is fragile
+      # across the CI directory layout.
+      - name: Build frontend
         working-directory: frontend
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Install Tauri CLI
         uses: taiki-e/install-action@v2
