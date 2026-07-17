@@ -1,0 +1,37 @@
+[package]
+name = "ui"
+description = "Tauri desktop shell: command surface, event bridge, notifications"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = ["notifications", "qr-login"]
+## Native macOS notifications for incoming messages.
+notifications = ["dep:tauri-plugin-notification"]
+## QR-code login flow.
+qr-login = ["telegram-core/qr-login"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+shared = { workspace = true }
+telegram-core = { workspace = true }
+cache = { workspace = true }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-notification = { version = "2", optional = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tracing-appender = { workspace = true }
+chrono = { workspace = true }
+base64 = { workspace = true }
+
+[lints.clippy]
+unwrap_used = "deny"

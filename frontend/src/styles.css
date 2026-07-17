@@ -1,0 +1,640 @@
+/* TelegramGui — minimal native-feeling theme (auto light/dark). */
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --bg-alt: #f2f4f7;
+  --bg-hover: #e8ebef;
+  --border: #dcdfe4;
+  --text: #1c1e21;
+  --muted: #7a828c;
+  --accent: #3390ec;
+  --accent-soft: #d6e9fb;
+  --bubble-in: #f1f3f5;
+  --bubble-out: #dcf1ff;
+  --danger: #d64545;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17212b;
+    --bg-alt: #0e1621;
+    --bg-hover: #202b36;
+    --border: #101921;
+    --text: #e9edf0;
+    --muted: #7d8b99;
+    --accent: #5eb5f7;
+    --accent-soft: #234a68;
+    --bubble-in: #182533;
+    --bubble-out: #2b5278;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--accent);
+}
+
+.app {
+  display: flex;
+  height: 100%;
+}
+
+.centered {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.centered-row {
+  text-align: center;
+  padding: 12px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.padded {
+  padding: 16px;
+}
+
+.error {
+  color: var(--danger);
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.link {
+  color: var(--accent);
+  padding: 6px 0;
+}
+
+/* ---- login ---- */
+
+.login-card {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.login-card h1 {
+  margin-bottom: 12px;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.login-card button:not(.link) {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.login-card button:disabled {
+  opacity: 0.5;
+}
+
+.qr {
+  width: 240px;
+  height: 240px;
+  margin: 12px auto;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.qr.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+
+/* ---- chat list ---- */
+
+.chat-list {
+  width: 300px;
+  min-width: 240px;
+  border-right: 1px solid var(--border);
+  background: var(--bg-alt);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.12s ease;
+}
+
+.chat-list.collapsed {
+  width: 66px;
+  min-width: 66px;
+}
+
+.chat-list-header {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.chat-list.collapsed .chat-list-header {
+  padding: 8px 4px;
+}
+
+.chat-list-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.chat-list.collapsed .chat-list-top {
+  justify-content: center;
+}
+
+.collapse-btn {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.collapse-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.account-button {
+  text-align: left;
+  font-weight: 600;
+  padding: 4px 6px;
+}
+
+.account-menu {
+  position: absolute;
+  top: 34px;
+  left: 10px;
+  right: 10px;
+  z-index: 10;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.account-menu button {
+  text-align: left;
+  padding: 10px 12px;
+}
+
+.account-menu button:hover,
+.account-menu button.active {
+  background: var(--bg-hover);
+}
+
+.account-menu .danger {
+  color: var(--danger);
+}
+
+.sync-banner {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0 6px;
+}
+
+.chat-scroll {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.chat-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  text-align: left;
+}
+
+.chat-row:hover {
+  background: var(--bg-hover);
+}
+
+.chat-row.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Collapsed rail: centred avatars, ring highlight instead of a full bar. */
+.chat-list.collapsed .chat-row {
+  justify-content: center;
+  padding: 6px 0;
+}
+
+.chat-list.collapsed .chat-row.active {
+  background: transparent;
+}
+
+.chat-list.collapsed .chat-row.active .avatar,
+.chat-list.collapsed .chat-row.active .chat-avatar {
+  box-shadow: 0 0 0 2px var(--accent);
+  border-radius: 50%;
+}
+
+.chat-avatar-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.unread-dot {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-alt);
+}
+
+.chat-row.active .chat-preview,
+.chat-row.active .typing {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.chat-avatar {
+  font-size: 22px;
+  width: 42px;
+  text-align: center;
+}
+
+/* ---- avatars ---- */
+
+.avatar {
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Reserves the avatar column for continuation messages so bubbles align. */
+.avatar-gutter {
+  flex: 0 0 auto;
+  width: 34px;
+}
+
+.chat-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pin {
+  margin-right: 4px;
+  font-size: 11px;
+}
+
+.chat-preview {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.typing {
+  color: var(--accent);
+}
+
+.unread-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+.chat-row.active .unread-badge {
+  background: #fff;
+  color: var(--accent);
+}
+
+/* ---- messages ---- */
+
+.message-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.message-search {
+  width: 220px;
+}
+
+.message-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  /* Avoid width changes when the scrollbar appears/disappears (a flicker
+     source): keep the gutter reserved. */
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* Grows to push a short conversation to the bottom, but shrinks to zero once
+   messages overflow — so the top never gets clipped and cannot scroll. */
+.message-content::before {
+  content: "";
+  flex: 1 1 auto;
+}
+
+.bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.bubble-row.out {
+  justify-content: flex-end;
+}
+
+.bubble {
+  position: relative;
+  max-width: 62%;
+  border-radius: 12px;
+  padding: 7px 11px;
+  background: var(--bubble-in);
+}
+
+.bubble-row.out .bubble {
+  background: var(--bubble-out);
+}
+
+.sender {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.reply-ref {
+  font-size: 12px;
+  color: var(--muted);
+  border-left: 2px solid var(--accent);
+  padding-left: 6px;
+  margin-bottom: 4px;
+}
+
+.bubble .text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bubble .meta {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.state.failed {
+  color: var(--danger);
+}
+
+.reactions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.reaction {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 13px;
+}
+
+.reaction.chosen {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Hover toolbar sits *beside* the bubble (in the empty gutter), vertically
+   centred — never above it, so the scroll container can't clip it and it
+   never covers the neighbouring message. */
+.bubble-actions {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  gap: 2px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  z-index: 5;
+  white-space: nowrap;
+}
+
+/* Incoming: toolbar to the right of the bubble. Outgoing: to the left.
+   Touching the bubble edge (no gap) so moving the cursor onto it never
+   crosses a dead zone that would dismiss it. */
+.bubble-row.in .bubble-actions {
+  left: 100%;
+}
+
+.bubble-row.out .bubble-actions {
+  right: 100%;
+}
+
+.bubble:hover .bubble-actions {
+  display: flex;
+}
+
+.bubble-actions button {
+  padding: 3px 5px;
+  border-radius: 6px;
+}
+
+.bubble-actions button:hover {
+  background: var(--bg-hover);
+}
+
+/* ---- media ---- */
+
+.media-photo {
+  max-width: 100%;
+  max-height: 340px;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.media-sticker {
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  display: block;
+}
+
+.media-placeholder {
+  background: var(--bg-alt);
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.media-document {
+  display: block;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+/* ---- composer ---- */
+
+.composer {
+  border-top: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.composer-banner {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.composer-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  max-height: 140px;
+}
+
+.composer .attach {
+  font-size: 20px;
+  padding: 8px 4px;
+}
+
+.composer .send {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 9px 16px;
+}
+
+.composer .send:disabled {
+  opacity: 0.5;
+}

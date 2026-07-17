@@ -1,0 +1,20 @@
+# Rust
+/target
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Tauri generated
+crates/ui/gen/
+
+# Secrets & local env
+.env
+.env.*
+*.session
+
+# Logs & OS cruft
+*.log
+.DS_Store
+.idea/
+.vscode/
