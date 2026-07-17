@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: # allow building a bundle on demand from the Actions tab
+
+permissions:
+  contents: write # create releases and upload assets
+
+jobs:
+  bundle-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      # tauri build runs the config's beforeBuildCommand (which builds the
+      # frontend), but the deps must be installed first.
+      - name: Install frontend deps
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Tauri CLI
+        uses: taiki-e/install-action@v2
+        with:
+          tool: tauri-cli
+
+      # Build the app bundle. Run from the crate that holds tauri.conf.json so
+      # the CLI finds the config; --bundles forces bundling (config has
+      # bundle.active=false for local dev). Builds for the runner's arch
+      # (Apple Silicon); the unsigned .app triggers a Gatekeeper prompt on
+      # first open — add signing credentials later for distribution.
+      - name: Build .app and .dmg
+        working-directory: crates/ui
+        run: cargo tauri build --bundles app dmg
+
+      - name: Zip the .app for download
+        run: |
+          set -euo pipefail
+          APP=$(find target/release/bundle/macos -maxdepth 1 -name '*.app' | head -1)
+          echo "Bundled: $APP"
+          ditto -c -k --keepParent "$APP" "TelegramGui-macos-aarch64.app.zip"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: telegram-gui-macos
+          path: |
+            TelegramGui-macos-aarch64.app.zip
+            target/release/bundle/dmg/*.dmg
+          if-no-files-found: error
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            TelegramGui-macos-aarch64.app.zip
+            target/release/bundle/dmg/*.dmg

@@ -93,6 +93,31 @@ pnpm --dir frontend dev      # terminal 1 → http://localhost:5173
 cargo run -p ui              # terminal 2
 ```
 
+## Building a release bundle
+
+A `.app` (and `.dmg`) is built by [`.github/workflows/release.yml`](.github/workflows/release.yml)
+on the CI runner whenever a `v*` tag is pushed, and attached to the matching
+GitHub Release:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+You can also trigger it manually from the Actions tab (workflow_dispatch),
+which uploads the bundle as a workflow artifact without creating a release.
+
+To build locally (requires the Tauri CLI: `cargo install tauri-cli`):
+
+```bash
+cd crates/ui && cargo tauri build --bundles app dmg
+# → target/release/bundle/macos/TelegramGui.app  and  .../dmg/*.dmg
+```
+
+The bundle is built for Apple Silicon and is **unsigned** — macOS Gatekeeper
+shows a prompt on first launch. Add Apple Developer signing credentials to the
+workflow for distribution.
+
 ## Feature flags
 
 | Crate           | Flag            | Default | Effect                                  |
